@@ -17,3 +17,6 @@ personal-9894.md
 ehthumbs.db
 Thumbs.db
 
+.vscode
+.gitignore
+build/
