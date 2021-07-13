@@ -6,6 +6,7 @@ add_subdirectory(queue_list)
 add_subdirectory(queue_array)
 add_subdirectory(insertion_sort)
 add_subdirectory(merge_sort)
+add_subdirectory(priority_queue)
 add_subdirectory(lib/googletest) # add googletest subdirectory
 
 include_directories(googletest/include)
