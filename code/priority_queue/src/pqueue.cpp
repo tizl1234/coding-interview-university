@@ -1,86 +1,103 @@
 #include "pqueue.h"
 
 namespace DI {
-    PriorityQueue::PriorityQueue(size_t size) {
+    template <class DataType>
+    PriorityQueue<DataType>::PriorityQueue(size_t size) {
         size_ = size + 1;
-        data_ = std::unique_ptr<std::int64_t[]>(new std::int64_t[size]);
-        data_[0] = -1;
+        data_ = std::unique_ptr<PQueueNode<DataType>[]>(new PQueueNode<DataType>[size]);
+        data_[0].key = -1;
     }
 
-    bool PriorityQueue::IsEmpty() const {
+    template <class DataType>
+    bool PriorityQueue<DataType>::IsEmpty() const {
         return capacity_ == 0;
     }
 
-    void PriorityQueue::MaxHeapify(size_t index) {
+    template <class DataType>
+    void PriorityQueue<DataType>::SiftDown(size_t index) {
         if (index > capacity_) return;
 
         size_t l = Left(index);
         size_t r = Right(index);
         size_t SwapIndex = index;
 
-        if (l <= capacity_ && data_[l] > data_[index]) { // left child exists and it's bigger than parent
+        if (l <= capacity_ && data_[l].key > data_[index].key) { // left child exists and it's bigger than parent
             SwapIndex = l;
         }
 
-        if (r <= capacity_ && data_[r] > data_[SwapIndex]) {  // right child exists and it's bigger than parent
+        if (r <= capacity_ && data_[r].key > data_[SwapIndex].key) {  // right child exists and it's bigger than parent
             SwapIndex = r;
         }
         
         if (SwapIndex != index) {
             Swap(index, SwapIndex);
-            MaxHeapify(SwapIndex);
+            SiftDown(SwapIndex);
         }
 
         return;
     }
 
-    void PriorityQueue::Insert(std::int64_t value) {
+    template <class DataType>
+    void PriorityQueue<DataType>::Insert(size_t key, DataType value) {
         if (capacity_ + 1 < size_) {
             ++capacity_;
-            data_[capacity_] = value;
-            ShiftUp(capacity_);
+            data_[capacity_].key = key;
+            data_[capacity_].value = value;
+            SiftUp(capacity_);
         }
         //TODO exception throw
         return;
     }
 
-    std::int64_t PriorityQueue::ExtractMax() {
-        auto MaxValue = data_[1];
+    template <class DataType>
+    PQueueNode<DataType>* PriorityQueue<DataType>::ExtractMax() {
+        //TODO assert capacity > 0
+        PQueueNode<DataType>* MaxValue = new PQueueNode<DataType>();
+        MaxValue->key = data_[1].key;
+        MaxValue->value = data_[1].value;
 
         Swap(1, capacity_--);
-        MaxHeapify(1);
+        SiftDown(1);
         return MaxValue;
     }
 
-    size_t PriorityQueue::Left(size_t index) {
+    template <class DataType>
+    size_t PriorityQueue<DataType>::Left(size_t index) {
         return index << 1; // 2 * index;
     }
-
-    size_t PriorityQueue::Right(size_t index) {
+    template <class DataType>
+    size_t PriorityQueue<DataType>::Right(size_t index) {
         return (index << 1) + 1; // 2 * index + 1;
     }
 
-    size_t PriorityQueue::Parent(size_t index) {
+    template <class DataType>
+    size_t PriorityQueue<DataType>::Parent(size_t index) {
         return index >> 1; // index / 2;
     }
 
-    void PriorityQueue::ShiftUp(size_t index) {
-        if (index > capacity_) return; // stop shift if index doesn't exist or it's the top of the heap. so end recursion
+    template <class DataType>
+    void PriorityQueue<DataType>::SiftUp(size_t index) {
+        if (index > capacity_) return; // stop sift if index doesn't exist or it's the top of the heap. so end recursion
         if (index == 1) return;
         
         auto parent = Parent(index);
 
-        if (data_[index] > data_[parent]) {
+        if (data_[index].key > data_[parent].key) {
             Swap(parent, index);
         }
 
-        ShiftUp(parent);
+        SiftUp(parent);
     }
 
-    void PriorityQueue::Swap(const size_t A, const size_t B) {
-        auto temp_value = data_[A];
+    template <class DataType>
+    void PriorityQueue<DataType>::Swap(const size_t A, const size_t B) {
+        size_t temp_key = data_[A].key;
+        DataType temp_value = data_[A].value;
 
-        data_[A] = data_[B];
-        data_[B] = temp_value;
+        data_[A].key = data_[B].key;
+        data_[A].value = data_[B].value;
+
+        data_[B].key = temp_key;
+        data_[B].value = temp_value;
     }
 }
