@@ -6,6 +6,7 @@ namespace DI {
     class PriorityQueue {
     public:
         PriorityQueue(std::size_t size);
+        PriorityQueue(PQueueNode<DataType>* array, size_t size);
         PriorityQueue(const PriorityQueue &) = delete;
         PriorityQueue &operator=(const PriorityQueue &) = delete;
 
@@ -13,11 +14,13 @@ namespace DI {
         void Insert(size_t key, DataType value);
         DataType GetMax() const { return data_[1].value; }
         PQueueNode<DataType>* ExtractMax();
+
     private:
         size_t capacity_ = 0; // heap capacity
         size_t size_; // actual array size
         std::unique_ptr<PQueueNode<DataType>[]> data_;
 
+        void BuildMaxHeap();
         void SiftUp(size_t index);
         void SiftDown(size_t index);
         size_t Left(size_t index);

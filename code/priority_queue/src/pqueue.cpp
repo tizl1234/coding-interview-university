@@ -9,6 +9,14 @@ namespace DI {
     }
 
     template <class DataType>
+    PriorityQueue<DataType>::PriorityQueue(PQueueNode<DataType>* array, size_t size) {
+        size_ = size; //assume that 0 elemient is -1
+        data_ = std::unique_ptr<PQueueNode<DataType>[]>(array);
+        capacity_ = size - 1;
+        BuildMaxHeap();
+    }
+
+    template <class DataType>
     bool PriorityQueue<DataType>::IsEmpty() const {
         return capacity_ == 0;
     }
@@ -52,13 +60,18 @@ namespace DI {
     template <class DataType>
     PQueueNode<DataType>* PriorityQueue<DataType>::ExtractMax() {
         //TODO assert capacity > 0
-        PQueueNode<DataType>* MaxValue = new PQueueNode<DataType>();
-        MaxValue->key = data_[1].key;
-        MaxValue->value = data_[1].value;
+        PQueueNode<DataType>* MaxValue = new PQueueNode<DataType>(data_[1].key, data_[1].value);
 
         Swap(1, capacity_--);
         SiftDown(1);
         return MaxValue;
+    }
+
+    template <class DataType>
+    void PriorityQueue<DataType>::BuildMaxHeap() {
+        for (size_t i = capacity_; i >= 1; --i) {
+            SiftDown(i);
+        }
     }
 
     template <class DataType>
