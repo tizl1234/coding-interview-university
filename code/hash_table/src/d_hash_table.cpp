@@ -2,10 +2,9 @@
 #include <iostream>
 
 namespace DI {
-
     template<class ValueDataType>
     DHashTable<ValueDataType>::DHashTable(const size_t size) {
-        size_ = size;
+        size_ = 2 * size; // need to be twice bigger than given size
         data_ = std::unique_ptr<DHashObject<ValueDataType>[]>(new DHashObject<ValueDataType>[size_]);
 
         for (size_t i = 0; i < size_; ++i) {
@@ -41,13 +40,17 @@ namespace DI {
     template<class ValueDataType>
     const ValueDataType DHashTable<ValueDataType>::Get(const std::string key) {
         size_t index = Hash(key);
-
-        while (!data_[index].IsNull())
-        {
+        size_t original_index = index;
+        std::cout << index << data_[index].GetKey() << key << std::endl;
+        while (!data_[index].IsNull()) {
+            std::cout << data_[index].GetKey() << std::endl;
             if (key == data_[index].GetKey()) {
                 return data_[index].GetValue();
-            } else {
-                index = (index + 1) % size_;
+            }
+            
+            index = (index + 1) % size_;
+            if (index == original_index) {
+                break;
             }
         }
 

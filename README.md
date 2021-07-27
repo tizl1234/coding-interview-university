@@ -618,7 +618,7 @@ Write code on a whiteboard or paper, not a computer. Test with some sample input
         - [x] hash(k, m) - m is size of hash table
         - [x] add(key, value) - if key already exists, update value
         - [ ] exists(key)
-        - [ ] get(key)
+        - [x] get(key)
         - [x] remove(key)
 
 ## More Knowledge

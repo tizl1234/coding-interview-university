@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
     HashTable.Remove("First key");
 
     HashTable.PrintDebug();
-    const std::string Key("Second key");
-    std::cout << HashTable.Get(Key) << std::endl;
+    //const std::string Key("Second key");
+    std::cout << HashTable.Get("Second key") << std::endl;
     return EXIT_SUCCESS;
 }

@@ -11,7 +11,7 @@ namespace DI {
             DHashObject(const DHashObject &) = delete;
             DHashObject &operator=(const DHashObject &) = default;
 
-            std::string GetKey();
+            std::string &GetKey();
             ValueDataType &GetValue();
 
             void SetKey(const std::string key);
@@ -34,7 +34,7 @@ namespace DI {
     DHashObject<ValueDataType>::~DHashObject() {}
 
     template<class ValueDataType>
-    std::string DHashObject<ValueDataType>::GetKey (/* args */) {
+    std::string &DHashObject<ValueDataType>::GetKey (/* args */) {
         return key_;
     }
 
