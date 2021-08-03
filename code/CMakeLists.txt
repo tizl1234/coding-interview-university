@@ -9,6 +9,7 @@ add_subdirectory(merge_sort)
 add_subdirectory(quick_sort)
 add_subdirectory(priority_queue)
 add_subdirectory(hash_table)
+add_subdirectory(binary_search_tree)
 add_subdirectory(lib/googletest) # add googletest subdirectory
 
 include_directories(googletest/include)
